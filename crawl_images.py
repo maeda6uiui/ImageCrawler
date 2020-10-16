@@ -13,7 +13,7 @@ def create_custom_logger(custom_log_filepath):
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
     logger.propagate=False
-    handler=logging.FileHandler(custom_log_filepath)
+    handler=logging.FileHandler(custom_log_filepath,"w",encoding="utf_8")
     handler.setLevel(logging.INFO)
     handler.setFormatter(logging.Formatter(logging_fmt))
     logger.addHandler(handler)
@@ -39,8 +39,8 @@ def resize_images(width,height,save_dir):
 
     for file in files:
         image=Image.open(file)
-        image_resize=image.resize((width,height))
-        image_resize.save(file)
+        image=image.resize((width,height))
+        image.save(file)
 
 def main(
     keyword_list_filepath,
@@ -84,7 +84,11 @@ def main(
             w.write("\n")
 
         crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,downloader_threads)
-        resize_images(image_width,image_height,save_dir)
+        try:
+            resize_images(image_width,image_height,save_dir)
+        except Exception as e:
+            logger.error(e)
+            continue
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
