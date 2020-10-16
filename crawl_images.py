@@ -20,8 +20,8 @@ def create_custom_logger(custom_log_filepath):
 
     return logger
 
-def get_md5_hash(title):
-    return hashlib.md5(title.encode()).hexdigest()
+def get_md5_hash(keyword):
+    return hashlib.md5(keyword.encode()).hexdigest()
 
 def crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,downloader_threads):
     crawler=BingImageCrawler(
