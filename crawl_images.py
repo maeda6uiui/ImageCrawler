@@ -49,7 +49,8 @@ def main(
     image_height,
     save_root_dir,
     custom_log_filepath,
-    resume_index,
+    index_lower_bound,
+    index_upper_bound,
     feeder_threads,
     parser_threads,
     downloader_threads):
@@ -59,7 +60,7 @@ def main(
     logger.info("image_size: ({},{})".format(image_width,image_height))
     logger.info("save_root_dir: {}".format(save_root_dir))
     logger.info("custom_log_filepath: {}".format(custom_log_filepath))
-    logger.info("resume_index: {}".format(resume_index))
+    logger.info("index lower_bound: {}\tindex upper bound: {}".format(index_lower_bound,index_upper_bound))
     logger.info("feader_threads: {}\tparser_threads: {}\tdownloader_threads: {}".format(
         feeder_threads,parser_threads,downloader_threads))
 
@@ -69,8 +70,10 @@ def main(
         keywords=r.read().splitlines()
 
     for idx,keyword in enumerate(keywords):
-        if idx<resume_index:
+        if idx<index_lower_bound:
             continue
+        if index_upper_bound>=0 and idx>=index_upper_bound:
+            break
 
         logger.info("{}\t{}".format(idx,keyword))
 
@@ -99,7 +102,8 @@ if __name__=="__main__":
     parser.add_argument("--image_height",type=int,default=256)
     parser.add_argument("--save_root_dir",type=str,default="./Images")
     parser.add_argument("--custom_log_filepath",type=str,default="./progress.txt")
-    parser.add_argument("--resume_index",type=int,default=0)
+    parser.add_argument("--index_lower_bound",type=int,default=0) #Inclusive
+    parser.add_argument("--index_upper_bound",type=int,default=-1)    #Exclusive  -1: No uppper bound
     parser.add_argument("--feeder_threads",type=int,default=2)
     parser.add_argument("--parser_threads",type=int,default=4)
     parser.add_argument("--downloader_threads",type=int,default=8)
@@ -113,7 +117,8 @@ if __name__=="__main__":
         args.image_height,
         args.save_root_dir,
         args.custom_log_filepath,
-        args.resume_index,
+        args.index_lower_bound,
+        args.index_upper_bound,
         args.feeder_threads,
         args.parser_threads,
         args.downloader_threads
