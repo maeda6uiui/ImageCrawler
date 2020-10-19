@@ -1,8 +1,5 @@
 """
 画像を収集する。
-ここでは収集された画像のリサイズのみを行う。
-
-不正な画像の除去や画像形式の統一はこの後で行う。
 """
 import argparse
 import glob
@@ -46,10 +43,25 @@ def resize_images(width,height,save_dir,logger):
     for file in files:
         try:
             image=Image.open(file)
+
+            #Convert the image to RGB.
+            if image.mode in ("RGBA","P"):
+                image=image.convert("RGB")
+
+            #Resize
             image=image.resize((width,height))
-            image.save(file)
+
+            #Save as JPG
+            splits=os.path.splitext(file)
+            dst_file=file
+            if splits[1]!=".jpg":
+                dst_file=splits[0]+".jpg"
+
+            image.save(dst_file)
         except Exception as e:
+            os.remove(file)
             logger.error(e)
+
             continue
 
 def main(
