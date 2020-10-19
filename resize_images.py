@@ -15,7 +15,7 @@ def main(save_root_dir,image_width,image_height,resume_index):
 
     pathname=os.path.join(save_root_dir,"*")
     directories=glob.glob(pathname)
-    for idx,directory in tqdm(enumerate(directories)):
+    for idx,directory in tqdm(enumerate(directories),total=len(directories)):
         if idx<resume_index:
             continue
 
