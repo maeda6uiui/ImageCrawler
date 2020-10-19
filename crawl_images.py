@@ -1,3 +1,9 @@
+"""
+画像を収集する。
+ここでは収集された画像のリサイズのみを行う。
+
+不正な画像の除去や画像形式の統一はこの後で行う。
+"""
 import argparse
 import glob
 import hashlib

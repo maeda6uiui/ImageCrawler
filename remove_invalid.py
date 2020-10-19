@@ -1,3 +1,6 @@
+"""
+不正な画像を取り除く。
+"""
 import argparse
 import glob
 import logging
