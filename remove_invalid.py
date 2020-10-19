@@ -10,12 +10,15 @@ logging.basicConfig(format=logging_fmt)
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
 
-def main(save_root_dir):
+def main(save_root_dir,resume_index):
     count_invalid=0
 
     pathname=os.path.join(save_root_dir,"*")
     directories=glob.glob(pathname)
-    for directory in tqdm(directories):
+    for idx,directory in tqdm(enumerate(directories)):
+        if idx<resume_index:
+            continue
+
         pathname=os.path.join(directory,"*[!txt]")
         files=glob.glob(pathname)
 
@@ -33,6 +36,7 @@ def main(save_root_dir):
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--save_root_dir",type=str,default="./Images")
+    parser.add_argument("--resume_index",type=int,default=0)
     args=parser.parse_args()
 
-    main(args.save_root_dir)
+    main(args.save_root_dir,args.resume_index)
