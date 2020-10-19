@@ -16,6 +16,9 @@ logger.setLevel(level=logging.INFO)
 def main(save_root_dir,image_width,image_height,resume_index):
     pathname=os.path.join(save_root_dir,"*")
     directories=glob.glob(pathname)
+
+    count_errors=0
+
     for idx,directory in tqdm(enumerate(directories),total=len(directories)):
         if idx<resume_index:
             continue
@@ -46,7 +49,11 @@ def main(save_root_dir,image_width,image_height,resume_index):
                 os.remove(file)
                 logger.error(e)
 
+                count_errors+=1
+
                 continue
+    
+    logger.info("Total number of errors: {}".format(count_errors))
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()

@@ -53,8 +53,10 @@ def resize_images(width,height,save_dir,logger):
 
             #Save as JPG
             splits=os.path.splitext(file)
-            dst_file=file
-            if splits[1]!=".jpg":
+            dst_file=None
+            if splits[1]==".jpg":
+                dst_file=file
+            else:
                 dst_file=splits[0]+".jpg"
 
             image.save(dst_file)
