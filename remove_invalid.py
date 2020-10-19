@@ -1,5 +1,5 @@
 """
-不正な画像を取り除く。
+Pillowで開けない画像を削除する。
 """
 import argparse
 import glob
