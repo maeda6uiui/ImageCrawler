@@ -33,14 +33,18 @@ def crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,d
     )
     crawler.crawl(keyword=keyword,max_num=max_num_images)
 
-def resize_images(width,height,save_dir):
+def resize_images(width,height,save_dir,logger):
     pathname=os.path.join(save_dir,"*[!txt]")
     files=glob.glob(pathname)
 
     for file in files:
-        image=Image.open(file)
-        image=image.resize((width,height))
-        image.save(file)
+        try:
+            image=Image.open(file)
+            image=image.resize((width,height))
+            image.save(file)
+        except Exception as e:
+            logger.error(e)
+            continue
 
 def main(
     keyword_list_filepath,
@@ -87,11 +91,7 @@ def main(
             w.write("\n")
 
         crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,downloader_threads)
-        try:
-            resize_images(image_width,image_height,save_dir)
-        except Exception as e:
-            logger.error(e)
-            continue
+        resize_images(image_width,image_height,save_dir,logger)
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
