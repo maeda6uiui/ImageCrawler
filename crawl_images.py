@@ -61,6 +61,7 @@ def resize_images(width,height,save_dir,logger):
 
             image.save(dst_file)
         except Exception as e:
+            image.close()
             os.remove(file)
             logger.error(e)
 
