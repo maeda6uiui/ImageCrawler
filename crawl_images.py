@@ -12,7 +12,7 @@ from PIL import Image
 logging_fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(format=logging_fmt)
 
-def create_custom_logger(custom_log_filepath):
+def create_custom_logger(custom_log_filepath:str)->logging.Logger:
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
     logger.propagate=False
@@ -23,10 +23,16 @@ def create_custom_logger(custom_log_filepath):
 
     return logger
 
-def get_md5_hash(keyword):
+def get_md5_hash(keyword:str)->str:
     return hashlib.md5(keyword.encode()).hexdigest()
 
-def crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,downloader_threads):
+def crawl_images(
+    keyword:str,
+    max_num_images:int,
+    save_dir:str,
+    feeder_threads:int,
+    parser_threads:int,
+    downloader_threads:int):
     crawler=BingImageCrawler(
         feeder_threads=feeder_threads,
         parser_threads=parser_threads,
@@ -36,7 +42,7 @@ def crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,d
     )
     crawler.crawl(keyword=keyword,max_num=max_num_images)
 
-def resize_images(width,height,save_dir,logger):
+def resize_images(width:int,height:int,save_dir:str,logger:logging.Logger):
     pathname=os.path.join(save_dir,"*[!txt]")
     files=glob.glob(pathname)
 
@@ -68,17 +74,17 @@ def resize_images(width,height,save_dir,logger):
             continue
 
 def main(
-    keyword_list_filepath,
-    max_num_images,
-    image_width,
-    image_height,
-    save_root_dir,
-    custom_log_filepath,
-    index_lower_bound,
-    index_upper_bound,
-    feeder_threads,
-    parser_threads,
-    downloader_threads):
+    keyword_list_filepath:str,
+    max_num_images:int,
+    image_width:int,
+    image_height:int,
+    save_root_dir:str,
+    custom_log_filepath:str,
+    index_lower_bound:int,
+    index_upper_bound:int,
+    feeder_threads:int,
+    parser_threads:int,
+    downloader_threads:int):
     logger=create_custom_logger(custom_log_filepath)
     logger.info("keyword_list_filepath: {}".format(keyword_list_filepath))
     logger.info("max_num_images: {}".format(max_num_images))
