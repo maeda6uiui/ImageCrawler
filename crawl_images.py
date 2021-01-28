@@ -14,11 +14,11 @@ from typing import List
 logging_fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(format=logging_fmt)
 
-def create_custom_logger(custom_log_filepath:str)->logging.Logger:
+def create_custom_logger(progress_log_filepath:str)->logging.Logger:
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
     logger.propagate=False
-    handler=logging.FileHandler(custom_log_filepath,"w",encoding="utf_8")
+    handler=logging.FileHandler(progress_log_filepath,"w",encoding="utf_8")
     handler.setLevel(logging.INFO)
     handler.setFormatter(logging.Formatter(logging_fmt))
     logger.addHandler(handler)
@@ -87,18 +87,18 @@ def main(
     image_width:int,
     image_height:int,
     save_root_dir:str,
-    custom_log_filepath:str,
+    progress_log_filepath:str,
     index_lower_bound:int,
     index_upper_bound:int,
     feeder_threads:int,
     parser_threads:int,
     downloader_threads:int):
-    logger=create_custom_logger(custom_log_filepath)
+    logger=create_custom_logger(progress_log_filepath)
     logger.info("keyword_list_filepath: {}".format(keyword_list_filepath))
     logger.info("max_num_images: {}".format(max_num_images))
     logger.info("image_size: ({},{})".format(image_width,image_height))
     logger.info("save_root_dir: {}".format(save_root_dir))
-    logger.info("custom_log_filepath: {}".format(custom_log_filepath))
+    logger.info("progress_log_filepath: {}".format(progress_log_filepath))
     logger.info("index lower_bound: {}\tindex upper bound: {}".format(index_lower_bound,index_upper_bound))
     logger.info("feader_threads: {}\tparser_threads: {}\tdownloader_threads: {}".format(
         feeder_threads,parser_threads,downloader_threads))
@@ -137,7 +137,7 @@ if __name__=="__main__":
     parser.add_argument("--image_width",type=int,default=256)
     parser.add_argument("--image_height",type=int,default=256)
     parser.add_argument("--save_root_dir",type=str,default="./Images")
-    parser.add_argument("--custom_log_filepath",type=str,default="./progress.txt")
+    parser.add_argument("--progress_log_filepath",type=str,default="./progress.txt")
     parser.add_argument("--index_lower_bound",type=int,default=0) #Inclusive
     parser.add_argument("--index_upper_bound",type=int,default=-1)    #Exclusive  -1: No uppper bound
     parser.add_argument("--feeder_threads",type=int,default=2)
@@ -152,7 +152,7 @@ if __name__=="__main__":
         args.image_width,
         args.image_height,
         args.save_root_dir,
-        args.custom_log_filepath,
+        args.progress_log_filepath,
         args.index_lower_bound,
         args.index_upper_bound,
         args.feeder_threads,
