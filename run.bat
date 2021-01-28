@@ -1,0 +1,12 @@
+py .\crawl_images.py ^
+    --keyword_list_filepath .\keywords.txt ^
+    --max_num_images 200 ^
+    --image_width 256 ^
+    --image_height 256 ^
+    --save_root_dir .\Images ^
+    --progress_log_filepath .\progress.txt ^
+    --index_lower_bound 0 ^
+    --index_upper_bound -1 ^
+    --feeder_threads 2 ^
+    --parser_threads 4 ^
+    --downloader_threads 8
