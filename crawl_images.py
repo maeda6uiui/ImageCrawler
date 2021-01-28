@@ -132,17 +132,17 @@ def main(
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
 
-    parser.add_argument("--keyword_list_filepath",type=str,default="./keywords.txt")
-    parser.add_argument("--max_num_images",type=int,default=200)
-    parser.add_argument("--image_width",type=int,default=256)
-    parser.add_argument("--image_height",type=int,default=256)
-    parser.add_argument("--save_root_dir",type=str,default="./Images")
-    parser.add_argument("--progress_log_filepath",type=str,default="./progress.txt")
-    parser.add_argument("--index_lower_bound",type=int,default=0) #Inclusive
-    parser.add_argument("--index_upper_bound",type=int,default=-1)    #Exclusive  -1: No uppper bound
-    parser.add_argument("--feeder_threads",type=int,default=2)
-    parser.add_argument("--parser_threads",type=int,default=4)
-    parser.add_argument("--downloader_threads",type=int,default=8)
+    parser.add_argument("--keyword_list_filepath",type=str)
+    parser.add_argument("--max_num_images",type=int)
+    parser.add_argument("--image_width",type=int)
+    parser.add_argument("--image_height",type=int)
+    parser.add_argument("--save_root_dir",type=str)
+    parser.add_argument("--progress_log_filepath",type=str)
+    parser.add_argument("--index_lower_bound",type=int) #Inclusive
+    parser.add_argument("--index_upper_bound",type=int)    #Exclusive  -1: No uppper bound
+    parser.add_argument("--feeder_threads",type=int)
+    parser.add_argument("--parser_threads",type=int)
+    parser.add_argument("--downloader_threads",type=int)
 
     args=parser.parse_args()
 
