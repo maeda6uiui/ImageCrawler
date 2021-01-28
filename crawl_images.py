@@ -1,5 +1,6 @@
+#!python3.6
 """
-画像を収集する。
+Bing画像検索を用いて画像を収集する。
 """
 import argparse
 import glob
@@ -8,6 +9,7 @@ import logging
 import os
 from icrawler.builtin import BingImageCrawler
 from PIL import Image
+from typing import List
 
 logging_fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(format=logging_fmt)
@@ -42,35 +44,41 @@ def crawl_images(
     )
     crawler.crawl(keyword=keyword,max_num=max_num_images)
 
-def resize_images(width:int,height:int,save_dir:str,logger:logging.Logger):
-    pathname=os.path.join(save_dir,"*[!txt]")
+def remove_unsupported_images(target_dir:str):
+    supported_extensions=[".jpg",".jpeg",".png"]
+
+    pathname=os.path.join(target_dir,"*[!txt]")
+    files=glob.glob(pathname)
+
+    for file in files:
+        extension=os.path.splitext(file)[1]
+        if extension not in supported_extensions:
+            os.remove(file)
+
+def format_images(target_dir:str,width:int,height:int,logger:logging.Logger):
+    """
+    画像のJPEG形式への変換およびリサイズを行う。
+    """
+    pathname=os.path.join(target_dir,"*[!txt]")
     files=glob.glob(pathname)
 
     for file in files:
         try:
             image=Image.open(file)
 
-            #Convert the image to RGB.
+            #アルファチャンネルは使用しない。
             if image.mode in ("RGBA","P"):
                 image=image.convert("RGB")
-
-            #Resize
+            
+            #リサイズ
             image=image.resize((width,height))
 
-            #Save as JPG
-            splits=os.path.splitext(file)
-            dst_file=None
-            if splits[1]==".jpg":
-                dst_file=file
-            else:
-                dst_file=splits[0]+".jpg"
-
-            image.save(dst_file)
+            base_filepath=os.path.splitext(file)[0]
+            save_filepath=base_filepath+".jpg"
+            image.save(save_filepath)
+        
         except Exception as e:
-            image.close()
-            os.remove(file)
             logger.error(e)
-
             continue
 
 def main(
@@ -118,7 +126,8 @@ def main(
             w.write("\n")
 
         crawl_images(keyword,max_num_images,save_dir,feeder_threads,parser_threads,downloader_threads)
-        resize_images(image_width,image_height,save_dir,logger)
+        remove_unsupported_images(save_dir)
+        format_images(save_dir,image_width,image_height,logger)
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
